@@ -13,8 +13,10 @@ router.get('/:id/actions', (req, res) => {
 })
 
 router.get('/', (req, res) => {
+  console.log('projects are being requested');
   db.get()
     .then(projects => {
+      console.log(projects)
       res.status(200).json(projects)
     })
     .catch(err => {

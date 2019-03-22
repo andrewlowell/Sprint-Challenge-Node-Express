@@ -3,8 +3,10 @@
 const express = require('express');
 const projects = require('./projects/projectRouter.js');
 const actions = require('./actions/actionRouter.js');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use('/projects', projects);
 app.use('/actions', actions);
