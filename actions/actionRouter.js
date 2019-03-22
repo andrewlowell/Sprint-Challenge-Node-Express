@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/actionModel.js');
+const projectDB = require('../data/helpers/projectModel');
 
 router.get('/', (req, res) => {
   db.get()
@@ -14,33 +15,39 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const { project_id, description, notes } = req.body
-  if (!project_id || !description || !notes) {
-    res.status(400).json({ errorMessage: "Please provide project_id and description and notes for the action." })
-  }
-  else if (description.length > 128) {
-    res.status(400).json({errorMessage: "Description must be 128 characters or fewer."})
-  }
-  else {
-    const action = {
-      project_id: project_id,
-      description: description,
-      notes: notes
-    }
-    db.insert(action)
-      .then(action => {
-        db.get(action.id)
-          .then(foundAction => {
-            res.status(201).json(foundAction)
+  projectDB.get(project_id)
+    .then(successfulP => {
+      if (!project_id || !description || !notes) {
+        res.status(400).json({ errorMessage: "Please provide project_id and description and notes for the action." })
+      }
+      else if (description.length > 128) {
+        res.status(400).json({errorMessage: "Description must be 128 characters or fewer."})
+      }
+      else {
+        const action = {
+          project_id: project_id,
+          description: description,
+          notes: notes
+        }
+        db.insert(action)
+          .then(action => {
+            db.get(action.id)
+              .then(foundAction => {
+                res.status(201).json(foundAction)
+              })
+              .catch(err => {
+                res.status(500).json({ error: 'created, but could not get the action??' })
+              })
           })
           .catch(err => {
-            res.status(500).json({ error: 'created, but could not get the action??' })
+            console.log(err)
+            res.status(500).json({ error: "There was an error while saving the action to the database" })
           })
-      })
-      .catch(err => {
-        console.log(err)
-        res.status(500).json({ error: "There was an error while saving the action to the database" })
-      })
-  }
+      }
+    })
+    .catch(err => {
+      res.status(404).json({ message: "The project with the specified ID does not exist." })
+    })
 })
 
 router.get('/:id', (req, res) => {
