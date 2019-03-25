@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+  We learned about the express router and we learned about the json middleware.
+
 - [ ] Describe Middleware?
+
+  Middleware is a name for functions that intercept a request and perform actions on it.
 
 - [ ] Describe a Resource?
 
+  A resource is something that we want to keep track of in an app we're writing. It's something that we perform CRUD operations on, like getting and updating and deleting and such.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+  APIs can return status codes, which have various helpful meanings. For instance, a 200 status code indicates success, whereas a 500 status code indicates that something in the server is broken which is why the API couldn't do the thing the user requested.
+
 - [ ] How can we partition our application into sub-applications?
+
+  One way to partition our app is to split up the resources that we're keeping track of into their own sub-apps, including making separate routing files and database helpers for each resource and keeping them in their own sub-folder and out of index.js, except by reference :)
 
 ## Project Setup
 
